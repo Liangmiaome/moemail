@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { loadConfig, saveConfig } from "../config.js";
+import { loadConfig, saveConfig } from "@moemail/core";
 
 export function registerConfigCommand(program: Command) {
   const cmd = program.command("config").description("Configure API endpoint and API Key");

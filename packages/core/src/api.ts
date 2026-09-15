@@ -1,14 +1,5 @@
 import { loadConfig } from "./config.js";
-import { log } from "./output.js";
-
-export class ApiError extends Error {
-  constructor(
-    public status: number,
-    message: string,
-  ) {
-    super(message);
-  }
-}
+import { ApiError, AuthError, ConfigError, PermissionError, QuotaError } from "./errors.js";
 
 async function request(
   method: string,
@@ -18,12 +9,14 @@ async function request(
   const config = loadConfig();
 
   if (!config.apiUrl) {
-    log("Error: API URL not configured. Run: moemail config set api-url <url>");
-    process.exit(2);
+    throw new ConfigError(
+      "API URL not configured. Run `moemail config set api-url <url>` or set MOEMAIL_API_URL.",
+    );
   }
   if (!config.apiKey) {
-    log("Error: API Key not configured. Run: moemail config set api-key <key>");
-    process.exit(2);
+    throw new ConfigError(
+      "API Key not configured. Run `moemail config set api-key <key>` or set MOEMAIL_API_KEY.",
+    );
   }
 
   const url = `${config.apiUrl.replace(/\/$/, "")}${path}`;
@@ -40,22 +33,35 @@ async function request(
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  if (res.status === 401 || res.status === 403) {
-    log("Error: Authentication failed. Check your API Key.");
-    process.exit(2);
-  }
-
   if (res.status === 204) {
     return null;
   }
 
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new ApiError(res.status, (data as any).error || `HTTP ${res.status}`);
+  let data: any = null;
+  try {
+    data = await res.json();
+  } catch {
+    // Non-JSON body (e.g. empty error). Leave data as null.
   }
 
-  return data;
+  if (res.ok) {
+    return data;
+  }
+
+  const message = data?.error || `HTTP ${res.status}`;
+
+  // Distinguish the error classes that a MoeMail Pro server returns so callers
+  // can surface them accurately instead of lumping everything into "auth failed".
+  switch (res.status) {
+    case 401:
+      throw new AuthError(message);
+    case 403:
+      throw new PermissionError(message);
+    case 429:
+      throw new QuotaError(message, data?.monthlyLimit, data?.monthlyUsed);
+    default:
+      throw new ApiError(res.status, message);
+  }
 }
 
 export const api = {

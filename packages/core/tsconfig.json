@@ -5,9 +5,10 @@
     "moduleResolution": "bundler",
     "esModuleInterop": true,
     "strict": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
     "outDir": "dist",
     "rootDir": "src",
-    "declaration": true,
     "types": ["node"],
     "skipLibCheck": true
   },

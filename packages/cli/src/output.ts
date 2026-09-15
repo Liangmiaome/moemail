@@ -1,3 +1,5 @@
+import { AuthError, ConfigError } from "@moemail/core";
+
 /**
  * Print JSON to stdout (for --json mode).
  */
@@ -20,8 +22,11 @@ export function log(message: string): void {
 }
 
 /**
- * Convert epoch ms timestamp to ISO 8601 string.
+ * Print an error to stderr and exit. Config/auth problems exit 2 (preserving
+ * the previous behaviour); everything else exits 1.
  */
-export function msToIso(ms: number): string {
-  return new Date(ms).toISOString();
+export function fail(e: unknown): never {
+  const message = e instanceof Error ? e.message : String(e);
+  log(`Error: ${message}`);
+  process.exit(e instanceof ConfigError || e instanceof AuthError ? 2 : 1);
 }

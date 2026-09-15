@@ -1,6 +1,6 @@
 import { Command } from "commander";
-import { api } from "../api.js";
-import { log, printJson, printText, msToIso } from "../output.js";
+import { api, msToIso } from "@moemail/core";
+import { fail, log, printJson, printText } from "../output.js";
 
 const EXPIRY_MAP: Record<string, number> = {
   "1h": 3600000,
@@ -54,9 +54,8 @@ export function registerCreateCommand(program: Command) {
           printText(`Created: ${result.email} (${expiryLabel})`);
           printText(`ID: ${result.id}`);
         }
-      } catch (e: any) {
-        log(`Error: ${e.message}`);
-        process.exit(1);
+      } catch (e) {
+        fail(e);
       }
     });
 }

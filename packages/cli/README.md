@@ -10,10 +10,14 @@ npm i -g @moemail/cli
 
 ## Quick Start
 
-### 1. Configure default domain
+### 1. Configure endpoint and API key
 ```bash
-moemail config --domain moemail.app
+moemail config set api-url https://moemail.app
+moemail config set api-key YOUR_API_KEY
 ```
+
+> Config is read from `~/.moemail/config.json`, or overridden by the
+> `MOEMAIL_API_URL` / `MOEMAIL_API_KEY` environment variables.
 
 ### 2. Create a temporary email
 ```bash
@@ -29,13 +33,14 @@ moemail wait --email-id <email_id> --timeout 120
 
 | Command | Description | Key Flags |
 |---------|-------------|-----------|
-| `config` | Set default domain and options | `--domain <domain>`, `--expiry <duration>` |
-| `create` | Create a temporary email address | `--domain <domain>`, `--expiry <duration>`, `--json` |
-| `list` | List all temporary emails | `--json` |
-| `wait` | Wait for incoming messages | `--email-id <id>`, `--timeout <seconds>`, `--json` |
-| `read` | Read email message content | `--email-id <id>`, `--message-id <id>`, `--json` |
-| `send` | Send email from temporary address | `--email-id <id>`, `--to <address>`, `--subject <text>`, `--body <text>`, `--json` |
-| `delete` | Delete temporary email | `--email-id <id>` |
+| `config set` | Set `api-url` or `api-key` | `config set <api-url\|api-key> <value>` |
+| `config list` | Show current configuration | — |
+| `create` | Create a temporary email address | `--name <prefix>`, `--domain <domain>`, `--expiry <1h\|24h\|3d\|permanent>`, `--json` |
+| `list` | List mailboxes, or messages in a mailbox | `--email-id <id>`, `--cursor <cursor>`, `--json` |
+| `wait` | Wait for incoming messages | `--email-id <id>`, `--timeout <seconds>`, `--interval <seconds>`, `--json` |
+| `read` | Read email message content | `--email-id <id>`, `--message-id <id>`, `--format <text\|html>`, `--json` |
+| `send` | Send email from temporary address | `--email-id <id>`, `--to <address>`, `--subject <text>`, `--content <text>`, `--json` |
+| `delete` | Delete a mailbox, or a single message | `--email-id <id>`, `--message-id <id>` |
 | `skill install` | Install AI agent skill | `--platform <claude\|codex\|all>` |
 
 ## Agent Workflow Example
@@ -90,7 +95,7 @@ All commands support `--json` flag for structured output, making them ideal for 
 - **Exit Codes**:
   - `0`: Command succeeded
   - `1`: Runtime error (invalid input, service error)
-  - `2`: Configuration error (missing domain, invalid credentials)
+  - `2`: Configuration or authentication error (missing `api-url`/`api-key`, invalid credentials)
 
 ## Project Links
 

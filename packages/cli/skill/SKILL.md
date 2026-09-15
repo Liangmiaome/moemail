@@ -62,10 +62,10 @@ moemail --json read --email-id "$ID" --message-id "$MSG_ID"
 | `send` | `--email-id`, `--to`, `--subject`, `--content` | — |
 | `delete` | `--email-id` | — |
 
-**Always put `--json` before the subcommand:**
+**`--json` is a global flag — it works before or after the subcommand:**
 ```bash
-moemail --json create --expiry 24h   # ✅ correct
-moemail create --expiry 24h --json   # ❌ wrong position
+moemail --json create --expiry 24h   # both work
+moemail create --expiry 24h --json
 ```
 
 ## JSON Output Shapes
@@ -83,7 +83,6 @@ moemail create --expiry 24h --json   # ❌ wrong position
 | Mistake | Fix |
 |---------|-----|
 | Calling `create` twice to get id + address | Call once, save to variable, parse both fields |
-| `--json` after subcommand | Move `--json` before the subcommand |
 | Timeout too short for slow services | Use `--timeout 300` for unreliable senders |
 | Inbox expired mid-test | Use `--expiry permanent` for long-running workflows |
 | Using `content` field for HTML emails | Check both `content` (plain text) and `html` fields |

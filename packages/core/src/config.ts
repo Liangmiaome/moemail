@@ -22,7 +22,7 @@ export function loadConfig(): CliConfig {
     } catch {}
   }
 
-  // Env overrides (higher priority)
+  // Env overrides (higher priority) — this is how the MCP server is configured.
   if (process.env.MOEMAIL_API_URL) config.apiUrl = process.env.MOEMAIL_API_URL;
   if (process.env.MOEMAIL_API_KEY) config.apiKey = process.env.MOEMAIL_API_KEY;
 

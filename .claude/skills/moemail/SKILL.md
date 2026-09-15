@@ -83,6 +83,6 @@ $CLI --json read --email-id "$ID" --message-id "$MSG_ID"
 
 ## Important details
 
-- Put `--json` before the subcommand.
+- `--json` is a global flag and works before or after the subcommand.
 - Call `create` once and parse both `id` and `address` from the same JSON result.
 - Check both `content` and `html` when reading HTML-heavy messages.

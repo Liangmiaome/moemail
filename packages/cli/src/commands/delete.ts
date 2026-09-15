@@ -1,6 +1,6 @@
 import { Command } from "commander";
-import { api } from "../api.js";
-import { log, printJson, printText } from "../output.js";
+import { api } from "@moemail/core";
+import { fail, printJson, printText } from "../output.js";
 
 export function registerDeleteCommand(program: Command) {
   program
@@ -26,9 +26,8 @@ export function registerDeleteCommand(program: Command) {
             printText(`Deleted mailbox ${opts.emailId}`);
           }
         }
-      } catch (e: any) {
-        log(`Error: ${e.message}`);
-        process.exit(1);
+      } catch (e) {
+        fail(e);
       }
     });
 }

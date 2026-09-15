@@ -125,7 +125,7 @@
     "title": "역할 관리",
     "description": "사용자 역할 관리 (황제 전용)",
     "search": "사용자 검색",
-    "searchPlaceholder": "사용자 이름 또는 이메일 입력",
+    "searchPlaceholder": "사용자 이름, 이메일 또는 이름으로 검색",
     "username": "사용자 이름",
     "email": "이메일",
     "role": "역할",
@@ -134,6 +134,17 @@
     "noUsers": "사용자를 찾을 수 없습니다",
     "loading": "로딩 중...",
     "updateSuccess": "사용자 역할이 성공적으로 업데이트되었습니다",
-    "updateFailed": "사용자 역할 업데이트에 실패했습니다"
+    "updateFailed": "사용자 역할 업데이트에 실패했습니다",
+    "totalUsers": "총 {count}명의 사용자",
+    "prevPage": "이전",
+    "nextPage": "다음",
+    "pageInfo": "{current} / {total} 페이지",
+    "deleteUser": "사용자 삭제",
+    "deleteTitle": "사용자 삭제",
+    "deleteConfirm": "사용자 {name}을(를) 삭제하시겠습니까? 이 사용자의 모든 이메일, 메시지 등의 데이터가 영구적으로 삭제되며 복구할 수 없습니다.",
+    "deleteConfirmButton": "삭제",
+    "cancel": "취소",
+    "deleteSuccess": "사용자가 삭제되었습니다",
+    "deleteFailed": "사용자 삭제에 실패했습니다"
   }
 }

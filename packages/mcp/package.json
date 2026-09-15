@@ -1,20 +1,21 @@
 {
-  "name": "@moemail/cli",
+  "name": "@moemail/mcp",
   "version": "1.0.0",
-  "description": "Agent-first CLI for MoeMail temporary email service",
+  "description": "MCP server for MoeMail temporary email service",
   "type": "module",
   "bin": {
-    "moemail": "dist/index.js"
+    "moemail-mcp": "dist/index.js"
   },
   "scripts": {
     "build": "bun build ./src/index.ts --outdir ./dist --target=node",
     "dev": "bun run ./src/index.ts"
   },
-  "files": ["dist", "skill"],
-  "keywords": ["email", "temporary", "cli", "agent", "ai"],
+  "files": ["dist"],
+  "keywords": ["email", "temporary", "mcp", "agent", "ai"],
   "license": "MIT",
   "dependencies": {
-    "commander": "^12.0.0"
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@moemail/core": "file:../core",

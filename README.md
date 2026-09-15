@@ -31,6 +31,7 @@
   <a href="#webhook-integration">Webhook Integration</a> •
   <a href="#openapi">OpenAPI</a> •
   <a href="#cli-tool">CLI Tool</a> •
+  <a href="#mcp-server">MCP Server</a> •
   <a href="#environment-variables">Environment Variables</a> •
   <a href="#github-oauth-app-configuration">Github OAuth Config</a> •
   <a href="#google-oauth-app-configuration">Google OAuth Config</a> •
@@ -555,13 +556,25 @@ moemail config set api-key YOUR_API_KEY
 # Create temporary email
 moemail create --domain moemail.app --expiry 1h --json
 
+# List mailboxes
+moemail list --json
+
+# List messages in a mailbox
+moemail list --email-id <id> --json
+
 # Wait for new messages (polling)
 moemail wait --email-id <id> --timeout 120 --json
 
 # Read message content
 moemail read --email-id <id> --message-id <id> --json
 
-# Delete email
+# Send an email from the temporary address
+moemail send --email-id <id> --to user@example.com --subject "Hello" --content "Body text" --json
+
+# Delete a single message
+moemail delete --email-id <id> --message-id <id>
+
+# Delete the whole mailbox
 moemail delete --email-id <id>
 ```
 
@@ -597,6 +610,47 @@ moemail skill install --platform codex
 ```
 
 For full documentation, see [packages/cli/README.md](packages/cli/README.md).
+
+## MCP Server
+
+MoeMail also ships an [MCP](https://modelcontextprotocol.io) server, so any
+MCP-capable client (Claude Desktop, Cursor, Cline, …) gets native temporary-email
+tools without shelling out to the CLI.
+
+### Tools
+
+| Tool | Description |
+|------|-------------|
+| `create_email` | Create a temporary mailbox (`1h` / `24h` / `3d` / `permanent`) |
+| `list_emails` | List mailboxes owned by the API key |
+| `list_messages` | List messages in a mailbox |
+| `read_message` | Read full text/HTML of a message |
+| `wait_for_email` | Poll for a new message (bounded; returns `status: "timeout"` to retry) |
+| `send_email` | Send from a temporary address |
+| `delete_email` | Delete a mailbox |
+| `delete_message` | Delete a single message |
+
+### Setup
+
+Add the server to your MCP client config (e.g. Claude Desktop `claude_desktop_config.json`).
+Credentials are passed via environment variables:
+
+```json
+{
+  "mcpServers": {
+    "moemail": {
+      "command": "npx",
+      "args": ["-y", "@moemail/mcp"],
+      "env": {
+        "MOEMAIL_API_KEY": "YOUR_API_KEY",
+        "MOEMAIL_API_URL": "https://moemail.app"
+      }
+    }
+  }
+}
+```
+
+For full documentation, see [packages/mcp/README.md](packages/mcp/README.md).
 
 ## Environment Variables
 
